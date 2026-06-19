@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>bussipeatus.com | Hetkel suletud</title>
+  <title>bussipeatus.com</title>
   <style>
     :root {
       color-scheme: light;
@@ -170,18 +170,23 @@
         <p>Tuleviku bussipeatuste info, lihtsam, selgem ja ilusam.</p>
       </div>
       <div style="text-align:right; color:#64748b; font-size:0.95rem;">
-        Avaleht: suletud
+        Avaleht: arenduses
       </div>
     </div>
 
     <section class="hero">
-      <h2>Leht on hetkel suletud</h2>
+      <h2>Leht on hetkel arenduses</h2>
       <p>
-        bussipeatus.com on ajutiselt suletud hooldustööde ja uuenduste tõttu.
-        Töötame selle kallal, et tuua tulevikus paremat bussipeatuste infot,
-        selgemat navigeerimist ja kiiremat kasutuskogemust.
-        Palun tule tagasi varsti — leht avaneb uuesti kohe, kui värskendus on valmis.
+        bussipeatus.com on uus ja mugav bussipeatuste portaal. Me ehitame üles
+        keskkonda, kus peatused, liinid ja reaalajas teave on selgelt nähtav,
+        mobiilisõbralik ning hea disainiga. Seni näed siin lihtsat teadet,
+        kuid tulevikus saab see olema tõeline bussisõitjate jaoks loodud navigeerimine.
       </p>
+
+      <div class="buttons">
+        <button type="button" class="primary" id="developerBtn" aria-haspopup="dialog" aria-controls="developerModal">Arendaja</button>
+        <button type="button" class="secondary" id="backBtn">Tagasi</button>
+      </div>
     </section>
 
     <div class="footer">
@@ -191,5 +196,79 @@
     </div>
   </div>
 
+  <div class="modal" id="developerModal" role="dialog" aria-modal="true" aria-labelledby="developerTitle" aria-hidden="true">
+    <div class="modal-card">
+      <h3 id="developerTitle">Developer: PeatusLab</h3>
+      <p>
+        bussipeatus.com on loodud tiimi nimega <strong>PeatusLab</strong>.
+        Meie eesmärk on tuua bussipeatuste info ja reisijate teenused uuele
+        tasemele: kiire, visuaalselt mõjus ja kasutajakeskne.
+      </p>
+      <p>
+        Arendusprotsessis keskendume eelkõige sellele, et kasutaja saaks
+        lihtsa ülevaate sõiduplaanidest, peatuste asukohtadest ja
+        bussiliinide otstarbekusest. Leht peab olema mugav nii tavalisele reisijale
+        kui ka linnaplaneerijale.
+      </p>
+      <p>
+        Meie meeskond töötab selle kallal, et ühendada kohaliku transpordi
+        statistika, selge disainikeel ja värske kasutajaliides.
+        Peatus.ee on hea inspiratsioon — bussipeatus.com tuleb sellest edasi
+        tänapäevasel kujul, kus värvid, ikoonid ja navigeerimine on parem.
+      </p>
+      <p>
+        Kui leht on valmis, näed siin: kiiret peatusotsingut, automaatset
+        värskendust reaalajas, planeerijat ja selgeid juhiseid kõigile teistele
+        bussireisijatele. Seniks on see just selline arenduses olev tutvustus,
+        mis näitab, et siht on olemas ja tööd tehakse.
+      </p>
+      <button type="button" class="secondary modal-close" id="closeModal">Sulge</button>
+    </div>
+  </div>
+
+  <script>
+    const developerBtn = document.getElementById('developerBtn');
+    const developerModal = document.getElementById('developerModal');
+    const closeModal = document.getElementById('closeModal');
+    const backBtn = document.getElementById('backBtn');
+    const body = document.body;
+
+    function openModal() {
+      developerModal.classList.add('open');
+      developerModal.setAttribute('aria-hidden', 'false');
+      body.style.overflow = 'hidden';
+      closeModal.focus();
+    }
+
+    function closeModalDialog() {
+      developerModal.classList.remove('open');
+      developerModal.setAttribute('aria-hidden', 'true');
+      body.style.overflow = '';
+      developerBtn.focus();
+    }
+
+    developerBtn.addEventListener('click', openModal);
+    closeModal.addEventListener('click', closeModalDialog);
+
+    developerModal.addEventListener('click', (event) => {
+      if (event.target === developerModal) {
+        closeModalDialog();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && developerModal.classList.contains('open')) {
+        closeModalDialog();
+      }
+    });
+
+    backBtn.addEventListener('click', () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = window.location.origin + window.location.pathname;
+      }
+    });
+  </script>
 </body>
 </html>
