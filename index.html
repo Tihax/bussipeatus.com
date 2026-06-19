@@ -7,99 +7,145 @@
   <link rel="stylesheet" href="script.css" />
 </head>
 <body>
-  <div class="notification" id="betaNotification" aria-live="polite">
-    <div class="notification-card">
-      <h3>See leht on veel beta</h3>
-      <p>Leht avaneb kohe, aga see on alles testfaasis. Sirvi rahulikult ja naera natuke meie mängulise prototüübiga.</p>
-      <div class="countdown">Sulgeb end automaatselt: <span id="notificationCountdown">10</span>s</div>
-      <div class="actions" style="justify-content:center; margin-top:1.5rem;">
-        <button type="button" class="secondary" id="closeNotification">Sulge nüüd</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="shell">
-    <div class="brand">
-      <div>
-        <h1>bussipeatus.com</h1>
-        <p>Tuleviku bussipeatuste info, lihtsam, selgem ja ilusam.</p>
-      </div>
-      <div class="status-pill">Beta 0.9</div>
-    </div>
-
-    <section class="hero">
-      <h2>Uus avaleht on nüüd lahti</h2>
-      <p>See versioon on mänguline ja katsetav: siin on uued funktsioonid, ilus disain ning esimene login/signup kogemus. TÖÖTAME edasi, et tulevikus tuua päris bussitranspordi info.</p>
-      <div class="actions">
-        <button type="button" class="primary" id="jokeButton">Näita nalja</button>
-        <button type="button" class="secondary" onclick="window.location.reload()">Värskenda</button>
-      </div>
-    </section>
-
-    <div class="cards">
-      <div class="card">
-        <h3>Uus disain</h3>
-        <p>Kerige edasi ja vaata värskeid kujunduselemente, mis teevad lehe kasutamise mõnusaks nii mobiilis kui arvutis.</p>
-      </div>
-      <div class="card">
-        <h3>Beta funktsioonid</h3>
-        <p>Login / Signup moodul on lisatud interaktiivse tootena. See on muidu lihtsalt demo, aga töötab kenasti.</p>
-      </div>
-      <div class="card">
-        <h3>Naerata ja küsi</h3>
-        <p>Tee naljakas klikk ja leht loob sulle kiire humoorika lause. See on lõbus testiks!</p>
-      </div>
-    </div>
-
-    <div class="login-area">
-      <div class="login-card">
-        <div class="tabs">
-          <button type="button" class="tab active" data-view="login">Login</button>
-          <button type="button" class="tab" data-view="signup">Signup</button>
+  <div class="page-shell">
+    <div class="auth-screen" id="authScreen">
+      <div class="auth-panel">
+        <div class="auth-brand">
+          <div class="logo-mark">B</div>
+          <div>
+            <h1>bussipeatus.com</h1>
+            <p>Kiireim ja selgeim bussireisi planeerija Eestis.</p>
+          </div>
         </div>
 
-        <form id="loginForm">
-          <div class="form-field">
-            <label for="loginEmail">E-post</label>
-            <input id="loginEmail" name="email" type="email" placeholder="meie@epost.ee" required />
-          </div>
-          <div class="form-field">
-            <label for="loginPassword">Salasõna</label>
-            <input id="loginPassword" name="password" type="password" placeholder="••••••••" required />
-          </div>
-          <div class="actions" style="margin-top: 0;">
-            <input type="submit" class="primary" value="Logi sisse" />
-          </div>
-        </form>
+        <div class="auth-copy">
+          <h2>Sisene või loo konto</h2>
+          <p>Enne reaalajas bussiinfo ja Eesti kaartide kasutamist logi sisse. Kõik on nüüd professionaalsem, puhtam ja valmis igapäevaseks kasutamiseks.</p>
+        </div>
 
-        <form id="signupForm" class="hidden">
-          <div class="form-field">
-            <label for="signupName">Nimi</label>
-            <input id="signupName" name="name" type="text" placeholder="Sinu nimi" required />
-          </div>
-          <div class="form-field">
-            <label for="signupEmail">E-post</label>
-            <input id="signupEmail" name="email" type="email" placeholder="meie@epost.ee" required />
-          </div>
-          <div class="form-field">
-            <label for="signupPassword">Salasõna</label>
-            <input id="signupPassword" name="password" type="password" placeholder="••••••••" required />
-          </div>
-          <div class="actions" style="margin-top: 0;">
-            <input type="submit" class="primary" value="Registreeru" />
-          </div>
-        </form>
+        <div class="tabs">
+          <button type="button" class="tab active" data-view="login">Logi sisse</button>
+          <button type="button" class="tab" data-view="signup">Loo konto</button>
+        </div>
+
+        <div class="auth-forms">
+          <form id="loginForm" class="auth-form active">
+            <div class="form-field">
+              <label for="loginEmail">E-post</label>
+              <input id="loginEmail" name="email" type="email" placeholder="mina@epost.ee" required />
+            </div>
+            <div class="form-field">
+              <label for="loginPassword">Salasõna</label>
+              <input id="loginPassword" name="password" type="password" placeholder="••••••••" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary">Jätka</button>
+            </div>
+          </form>
+
+          <form id="signupForm" class="auth-form hidden">
+            <div class="form-field">
+              <label for="signupName">Nimi</label>
+              <input id="signupName" name="name" type="text" placeholder="Sinu nimi" required />
+            </div>
+            <div class="form-field">
+              <label for="signupEmail">E-post</label>
+              <input id="signupEmail" name="email" type="email" placeholder="mina@epost.ee" required />
+            </div>
+            <div class="form-field">
+              <label for="signupPassword">Salasõna</label>
+              <input id="signupPassword" name="password" type="password" placeholder="••••••••" required />
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary">Loo konto</button>
+            </div>
+          </form>
+        </div>
       </div>
 
-      <div class="info-card">
-        <h3>Muidu see on veel beta</h3>
-        <p>Teavituseaknas näed, et leht sulgub ise 10 sekundi pärast. Vaata rahulikult ringi ja proovi demo login/signup funktsionaalsust.</p>
-        <p id="jokeText">Kui tahad, klõpsa 'Näita nalja' ja ma teen sulle väikese nalja.</p>
+      <div class="auth-preview">
+        <div class="preview-card">
+          <h3>Reaalajas Eesti bussid</h3>
+          <p>Kaardivaade, peatuste info ja täpsed väljumisajad Tallinna, Tartu, Pärnu ja Paide liinidel.</p>
+        </div>
+        <div class="preview-grid">
+          <div class="preview-item">
+            <strong>Tallinna bussipeatused</strong>
+            <span>9+ peatust, reaalajas liikumine</span>
+          </div>
+          <div class="preview-item">
+            <strong>Bussiajad</strong>
+            <span>15-20 minutiga väljumised kõigile populaarsetele liinidele</span>
+          </div>
+          <div class="preview-item">
+            <strong>Kaardivaade</strong>
+            <span>Visualiseeri trajektoore ja peatusi kõigis Eesti suurlinnades</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="footer">
-      <strong>Kerge katseversioon:</strong> see on ainult testlik prototüüp. Tegelik bussipeatus.info tuleb veel hiljem.
+    <div class="dashboard-screen hidden" id="dashboardScreen">
+      <header class="dashboard-header">
+        <div>
+          <p class="eyebrow">Bussireisi juhtpaneel</p>
+          <h1>Tere tulemast, <span id="userName">Kasutaja</span></h1>
+        </div>
+        <div class="user-actions">
+          <span class="user-chip" id="userEmail">epost@epost.ee</span>
+          <button type="button" class="secondary" id="logoutButton">Logi välja</button>
+        </div>
+      </header>
+
+      <section class="dashboard-grid">
+        <aside class="dashboard-sidebar">
+          <div class="panel small-panel">
+            <h2>Järgmised väljumised</h2>
+            <ul id="nextDepartures"></ul>
+          </div>
+
+          <div class="panel small-panel">
+            <h2>Populaarsed liinid</h2>
+            <div class="route-list" id="routeList"></div>
+          </div>
+        </aside>
+
+        <main class="dashboard-main">
+          <div class="panel main-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Kaardivaade</h2>
+                <p>Näita bussi asukohti ja peatusi Eesti pealinnadest väiksematesse keskustesse.</p>
+              </div>
+              <button type="button" class="secondary" id="refreshMap">Uuenda andmeid</button>
+            </div>
+            <div class="map-card" id="routeMap">
+              <div class="map-pin" style="top: 18%; left: 42%;">Tallinn</div>
+              <div class="map-pin" style="top: 58%; left: 50%;">Tartu</div>
+              <div class="map-pin" style="top: 72%; left: 20%;">Pärnu</div>
+              <div class="map-pin" style="top: 42%; left: 64%;">Jõgeva</div>
+              <div class="map-pin" style="top: 48%; left: 29%;">Paide</div>
+              <div class="route-line"></div>
+            </div>
+          </div>
+
+          <div class="panel main-panel">
+            <div class="panel-header">
+              <div>
+                <h2>Liini ajad</h2>
+                <p>Vaata täpseid bussiaegu ja peatuste loendit.</p>
+              </div>
+            </div>
+            <div class="schedule-grid">
+              <div class="schedule-card">
+                <h3 id="routeTitle">Liin Tallinn → Tartu</h3>
+                <p id="routeDescription">Väljub 12:05, saabub 15:10</p>
+                <ol class="schedule-list" id="routeSchedule"></ol>
+              </div>
+            </div>
+          </div>
+        </main>
+      </section>
     </div>
   </div>
 

@@ -1,92 +1,163 @@
-const notification = document.getElementById('betaNotification');
-const countdown = document.getElementById('notificationCountdown');
-const closeNotification = document.getElementById('closeNotification');
-const tabs = document.querySelectorAll('.tab');
+const authScreen = document.getElementById('authScreen');
+const dashboardScreen = document.getElementById('dashboardScreen');
+const authTabs = document.querySelectorAll('.tab');
 const loginForm = document.getElementById('loginForm');
 const signupForm = document.getElementById('signupForm');
+const logoutButton = document.getElementById('logoutButton');
+const userNameEl = document.getElementById('userName');
+const userEmailEl = document.getElementById('userEmail');
+const nextDepartures = document.getElementById('nextDepartures');
+const routeList = document.getElementById('routeList');
+const refreshMap = document.getElementById('refreshMap');
 const toast = document.getElementById('toast');
-const jokeButton = document.getElementById('jokeButton');
-const jokeText = document.getElementById('jokeText');
 
-let countdownValue = 10;
-let countdownTimer = null;
-let activeView = 'login';
+const users = [];
+let currentUser = null;
+let activeAuthView = 'login';
+let selectedRoute = 'tallinn-tartu';
 
-function showNotification() {
-  notification.classList.add('open');
-  countdown.textContent = countdownValue;
-  countdownTimer = setInterval(() => {
-    countdownValue -= 1;
-    countdown.textContent = countdownValue;
-    if (countdownValue <= 0) {
-      closeBetaNotification();
-    }
-  }, 1000);
-}
-
-function closeBetaNotification() {
-  if (!notification.classList.contains('open')) return;
-  notification.classList.remove('open');
-  clearInterval(countdownTimer);
-}
+const routeData = {
+  'tallinn-tartu': {
+    title: 'Tallinn → Tartu',
+    description: 'Modernne liin, mis ühendab pealinna ja ülikoolilinna.',
+    departures: ['12:05', '13:35', '15:05', '16:30'],
+    stops: ['Tallinn', 'Jüri', 'Tartu'],
+    schedule: ['Tallinn 12:05', 'Jüri 13:15', 'Tartu 15:10']
+  },
+  'tallinn-parnu': {
+    title: 'Tallinn → Pärnu',
+    description: 'Rannalinna ekspressliin mugavaks suviseks sõiduks.',
+    departures: ['10:20', '12:30', '14:45', '17:00'],
+    stops: ['Tallinn', 'Keila', 'Pärnu'],
+    schedule: ['Tallinn 10:20', 'Keila 11:10', 'Pärnu 13:05']
+  }
+};
 
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add('show');
-  setTimeout(() => {
+  window.setTimeout(() => {
     toast.classList.remove('show');
   }, 3000);
 }
 
-function setActiveTab(selected) {
-  tabs.forEach((tab) => {
-    tab.classList.toggle('active', tab.dataset.view === selected);
+function setAuthTab(view) {
+  activeAuthView = view;
+  authTabs.forEach((tab) => {
+    tab.classList.toggle('active', tab.dataset.view === view);
   });
-  document.getElementById('loginPanel').classList.toggle('hidden', selected !== 'login');
-  document.getElementById('signupPanel').classList.toggle('hidden', selected !== 'signup');
-  activeView = selected;
+  document.getElementById('loginForm').classList.toggle('hidden', view !== 'login');
+  document.getElementById('signupForm').classList.toggle('hidden', view !== 'signup');
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener('click', () => setActiveTab(tab.dataset.view));
+authTabs.forEach((tab) => {
+  tab.addEventListener('click', () => setAuthTab(tab.dataset.view));
 });
 
-closeNotification.addEventListener('click', closeBetaNotification);
+function renderRouteButtons() {
+  routeList.innerHTML = '';
+  Object.entries(routeData).forEach(([routeId, route]) => {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = `route-card ${routeId === selectedRoute ? 'active' : ''}`;
+    button.innerHTML = `<strong>${route.title}</strong><span>${route.description}</span>`;
+    button.addEventListener('click', () => {
+      selectedRoute = routeId;
+      renderRouteButtons();
+      renderSchedule();
+      showToast(`${route.title} ajad uuendatud.`);
+    });
+    routeList.appendChild(button);
+  });
+}
 
-loginForm.addEventListener('submit', (event) => {
+function renderSchedule() {
+  const route = routeData[selectedRoute];
+  document.getElementById('tallinnTartuSchedule').innerHTML = route.schedule
+    .map((stop) => `<li>${stop}</li>`)
+    .join('');
+  document.getElementById('tallinnParnuSchedule').innerHTML = route.schedule
+    .map((stop) => `<li>${stop}</li>`)
+    .join('');
+}
+
+function renderNextDepartures() {
+  const route = routeData[selectedRoute];
+  nextDepartures.innerHTML = route.departures
+    .map(
+      (departure) => `<li><strong>${departure}</strong> • ${route.title}</li>`
+    )
+    .join('');
+}
+
+function showDashboard(user) {
+  currentUser = user;
+  userNameEl.textContent = user.name;
+  userEmailEl.textContent = user.email;
+  authScreen.classList.add('hidden');
+  dashboardScreen.classList.remove('hidden');
+  renderRouteButtons();
+  renderSchedule();
+  renderNextDepartures();
+}
+
+function handleLoginSubmit(event) {
   event.preventDefault();
-  const email = loginForm.querySelector('[name="email"]').value.trim();
-  const password = loginForm.querySelector('[name="password"]').value.trim();
+  const email = event.target.email.value.trim().toLowerCase();
+  const password = event.target.password.value.trim();
   if (!email || !password) {
-    showToast('Sisesta e-post ja salasõna.');
+    showToast('Palun täida mõlemad väljad.');
     return;
   }
-  showToast('Logid sisse...');
-  setTimeout(() => {
-    showToast('Kahjuks on see alles beta ehk katseversioon — aga väga peaaegu!');
-  }, 1200);
-});
 
-signupForm.addEventListener('submit', (event) => {
+  const account = users.find((user) => user.email === email && user.password === password);
+  if (!account) {
+    showToast('Konto puudub või parool on vale. Proovi uuesti.');
+    return;
+  }
+
+  showToast('Tere tulemast tagasi!');
+  showDashboard(account);
+}
+
+function handleSignupSubmit(event) {
   event.preventDefault();
-  const name = signupForm.querySelector('[name="name"]').value.trim();
-  const email = signupForm.querySelector('[name="email"]').value.trim();
-  const password = signupForm.querySelector('[name="password"]').value.trim();
+  const name = event.target.name.value.trim();
+  const email = event.target.email.value.trim().toLowerCase();
+  const password = event.target.password.value.trim();
+
   if (!name || !email || !password) {
-    showToast('Täida kõik väljad enne jätkamist.');
+    showToast('Palun täida kõik väljad.');
     return;
   }
-  showToast('Registreerimine käib...');
-  setTimeout(() => {
-    showToast('Oled peaaegu valmis, aga see leht naerab sind veel. 😄');
-  }, 1200);
-});
 
-jokeButton.addEventListener('click', () => {
-  jokeText.textContent = 'Miks bussipeatus ei räägi? Sest tal on alati järgmine peatus!';
-  showToast('Hea valik! Naerame koos.');
+  if (users.some((user) => user.email === email)) {
+    showToast('Sellise e-postiga konto on juba olemas. Logi sisse.');
+    return;
+  }
+
+  const newUser = { name, email, password };
+  users.push(newUser);
+  showToast('Konto loodud. Tervitan sind süsteemis!');
+  setTimeout(() => showDashboard(newUser), 800);
+}
+
+function handleLogout() {
+  currentUser = null;
+  dashboardScreen.classList.add('hidden');
+  authScreen.classList.remove('hidden');
+  showToast('Oled välja logitud.');
+}
+
+loginForm.addEventListener('submit', handleLoginSubmit);
+signupForm.addEventListener('submit', handleSignupSubmit);
+logoutButton.addEventListener('click', handleLogout);
+refreshMap.addEventListener('click', () => {
+  renderNextDepartures();
+  showToast('Kaardivaade ja bussiajad uuendatud.');
 });
 
 window.addEventListener('load', () => {
-  showNotification();
+  renderRouteButtons();
+  renderSchedule();
 });
